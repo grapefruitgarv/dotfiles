@@ -1,0 +1,18 @@
+# System files
+.DS_Store
+.ssh/id_*
+
+# Sensitive App Configs
+.config/gh/hosts.yml
+.config/1Password/
+.config/op/
+.config/github-copilot/
+.config/google-workspace-mcp/
+
+# Caches and large directories
+.config/NuGet/
+.config/configstore/
+
+# Other stuff I don't want on there
+.config/MyStuff/mac-askpass.sh
+.config/MyStuff/pw.sh

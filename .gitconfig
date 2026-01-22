@@ -1,0 +1,25 @@
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+[user]
+	name = grapefruitgarv
+	email = 66042774+grapefruitgarv@users.noreply.github.com
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH7KJncTBLlyM8lKc1AAOp6l9GrPDpuljjnJX6dRUneh
+[init]
+	defaultBranch = main
+[color]
+	ui = auto
+[pull]
+	rebase = false
+[core]
+	excludesfile = /Users/archie/.gitignore_global
+	editor = code --wait
+[commit]
+	template = /Users/archie/.gitmessage.txt
+	gpgsign = true
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign

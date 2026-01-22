@@ -1,0 +1,50 @@
+# ~/.config/starship.toml
+
+# The overall order of prompt elements.
+# We only want directory, git information, and the prompt character.
+format = "$character $directory$git_branch$git_status"
+
+# Set to false to prevent an extra newline before the prompt.
+add_newline = false # Corrected from add_newLine
+
+# --- Modules Configuration ---
+
+# Directory: Shows only the current folder name.
+[directory]
+truncation_length = 1
+truncate_to_repo = false
+# The format string includes the style directly.
+# FG[051] is Zsh's 256-color code for a light cyan/blue.
+format = '[$path](fg:51) '
+
+# Git Branch: Displays the Git branch icon, the branch name, and wraps it in parentheses.
+[git_branch]
+# Color for this module (dark green)
+style = 'fg:40'
+symbol = '猪'
+# The format defines how the branch information appears, with inline styling for the branch name.
+
+format = '([$symbol](fg:40): [](fg:40)[\(](fg:40)([$branch](fg:red bold))[\)](fg:40))'
+
+
+# Git Status: Displays a yellow star if your repository has uncommitted changes (is "dirty").
+[git_status]
+# Define the symbols for various dirty states to be the yellow star.
+# This ensures any "dirty" condition results in the star.
+modified = '✗'
+staged = '✗'
+untracked = '✗'
+conflicted = '✗'
+renamed = '✗'
+deleted = '✗'
+# The format then displays all these status symbols (which will be our star if dirty).
+format = ' [$all_status](fg:yellow)'
+
+# up_to_date = '(fg:40)'
+
+# Character: This is the final prompt symbol (the `➜`).
+# It changes color based on the exit status of the last command.
+[character]
+# Using the exact arrow character '➜' (U+279C) for both success and error.
+success_symbol = '[➜](bold green)' # Displays a green '➜' if the last command succeeded.
+error_symbol = '[➜](bold red)'     # Displays a red '➜' if the last command failed.

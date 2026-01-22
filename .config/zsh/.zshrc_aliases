@@ -1,0 +1,13 @@
+alias src="source $HOME/.zshrc"
+alias zsconfig="code ~/.zshrc"
+# Avoid accidental deletions
+alias rm='rm -i'
+alias mv='mv -i'
+alias cp='cp -i'
+alias ls='exa --icons -stype'
+alias lsh='exa --icons --long --header -stype'
+alias lc='colorls --sd'
+alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
+alias lsg='ls --group-directories-first' # group directories first for ls/exa
+# Prevent rm -f from asking for confirmation on things like `rm -f *.bak`.
+setopt rm_star_silent

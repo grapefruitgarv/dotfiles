@@ -2,16 +2,16 @@
 *DS_Store
 
 # Sensitive App Configs
-*config/gh/private_hosts.yml
-*config/1Password/
-*config/op/
-*config/github-copilot/
-*config/google-workspace-mcp/
+*hosts.yml
+*1Password/
+*op/
+*github-copilot/
+*google-workspace-mcp/
 
 # Caches and large directories
-*config/NuGet/
-*config/configstore/
+*NuGet/
+*configstore/
 
 # Other stuff I don't want on there
-*config/MyStuff/mac-askpass.sh
-*config/MyStuff/pw.sh
+*mac-askpass.sh
+*pw.sh

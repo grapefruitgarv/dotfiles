@@ -1,0 +1,245 @@
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# profiler to see what's happening
+# zmodload zsh/zprof
+
+# Added zi zpmod plugin  
+  module_path+=( "/Users/archie/.zi/zmodules/zpmod/Src" )
+  zmodload zi/zpmod
+
+# Path to your oh-my-zsh installation.
+export ZSH=$HOME/.oh-my-zsh
+
+# Set ppath to fpath for completions
+fpath+=(/Users/archie/.oh-my-zsh/custom/plugins/zsh-completions/src)
+
+# Path to npm
+export PATH="$PATH:/usr/local/share/npm/bin"
+
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+ZSH_THEME="robbyrussell-mod"
+# ZSH_THEME="emotty"
+# ZSH_THEME="powerlevel10k/powerlevel10k"
+
+zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+
+# Set history to not include dupes
+setopt HIST_IGNORE_DUPS
+SAVEHIST=1000000
+HISTSIZE=1000000
+
+setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format.
+setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY             # Share history between all sessions.
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history.
+setopt HIST_IGNORE_ALL_DUPS      # Delete old recorded entry if new entry is a duplicate.
+setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
+setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
+setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
+setopt HIST_REDUCE_BLANKS   
+
+# Uncomment the following line to disable colors in ls.
+DISABLE_LS_COLORS="true"
+
+plugins=(
+zsh-nvm
+zsh-completions
+you-should-use
+fzf-zsh-plugin
+fd-zsh
+fzf-dir-navigator
+)
+
+# zplug manager stuff
+source /opt/homebrew/Cellar/zplug/2.4.2/init.zsh
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+zplug "changyuheng/fz", defer:1
+# npm completions
+zplug "lukechilds/zsh-better-npm-completion", defer:2
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+zplug load
+
+# homebrew completions
+FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+
+if type brew &>/dev/null; then
+    
+fi
+
+
+source <(curl -sL init.zshell.dev); zzinit
+# zi to load plugins
+zi snippet OMZP::git
+zi snippet OMZP::nvm
+zi snippet OMZP::brew
+# zi snippet OMZP::macos
+zi snippet OMZP::extract
+# zi snippet OMZP::z
+zi snippet OMZP::safe-paste
+zi snippet OMZP::aliases
+zi snippet OMZP::dirhistory
+zi snippet OMZP::command-not-found
+zi snippet OMZP::pyenv
+zi snippet OMZP::zsh-interactive-cd
+
+# Make z case insensitive
+export ZSHZ_CASE="ignore"
+zi light agkozak/zsh-z
+
+
+source ~/.zi/plugins/tj---git-extras/etc/git-extras-completion.zsh
+
+# 1Password completion
+eval "$(op completion zsh)"; compdef _op op
+
+source ~/.fonts/*.sh
+
+source $ZSH/oh-my-zsh.sh
+
+# remember directories
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+add-zsh-hook chpwd chpwd_recent_dirs
+
+# how to display directories
+# zstyle ':completion:*:*:cdr:*:*' menu selection
+
+zstyle ':completion:*' menu select
+
+# include Z, the fuzzy search
+# . /opt/homebrew/etc/profile.d/z.sh
+
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
+source /opt/homebrew/opt/chruby/share/chruby/auto.sh
+chruby ruby-3.4.5
+# Frum ruby manager
+#eval "$(frum init)"
+
+# source .zaliases file
+source ~/.config/MyStuff/.zaliases
+
+# Source .zfunctions file if I remove omz
+# source ~/.config/MyStuff/.zfunctions
+
+# Prevent rm -f from asking for confirmation on things like `rm -f *.bak`.
+setopt rm_star_silent
+
+# For lesspipe
+export LESSOPEN="|/opt/homebrew/bin/lesspipe.sh %s"
+
+# asdf
+# . /opt/homebrew/opt/asdf/libexec/asdf.sh
+
+# Zi installer added these
+zi light-mode for \
+  z-shell/z-a-meta-plugins \
+  @annexes # <- https://wiki.zshell.dev/ecosystem/category/-annexes
+# examples here -> https://wiki.zshell.dev/community/gallery/collection
+zicompinit # <- https://wiki.zshell.dev/docs/guides/commands
+zi light-mode for \
+  z-shell/z-a-meta-plugins \
+  @annexes @zunit
+
+zi has'zoxide' wait lucid for \
+  z-shell/zsh-zoxide
+
+source $(dirname $(gem which colorls))/tab_complete.sh
+
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+### Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
+fi
+
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust
+
+### End of Zinit's installer chunk
+
+# fzf shell integration
+eval "$(fzf --zsh)"
+source <(fzf --zsh)
+
+zinit light zdharma-continuum/fast-syntax-highlighting
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Set sudo helper.
+export SUDO_ASKPASS=/usr/local/bin/askpass
+
+source ~/.config/op/plugins.sh
+
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Applications/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Applications/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/Applications/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Applications/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+# Ollama PATH on external
+export OLLAMA_MODELS="/Volumes/Automation/Ollama_Models"
+
+# Directories to exclude from z's search
+export ZSH_Z_EXCLUDE_DIRS=('Users/archie/Documents/Coding/My stuff/Docker MCPs/docker-mcp-tutorial/examples/mydice')
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/archie/.cache/lm-studio/bin"
+
+# PATH for ccache, might need to remove if it messes things up
+# export PATH="$PATH:/opt/homebrew/opt/ccache/libexec"
+
+export PATH="$PATH:/Applications/screenpipe.app/Contents/MacOS"
+
+. "$HOME/.local/bin/env"
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/archie/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions
+
+# Set huggingface cache to external drive
+export HF_HOME="/Volumes/Automation/HuggingFace/huggingface_cache"
+
+# Cursor 1 or 2 = Block, 3 or 4 = Underline, 5 or 6 = Beam/Bar. Even for steady, odd for blinking
+# echo -ne '\e[1 q'

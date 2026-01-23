@@ -1,0 +1,240 @@
+tap "1password/tap"
+tap "hashicorp/tap"
+tap "homebrew/bundle"
+tap "homebrew/services"
+tap "lihaoyun6/tap"
+tap "minacle/chntpw"
+tap "sidneys/homebrew"
+tap "teamookla/speedtest"
+tap "zackelia/formulae"
+# General-purpose data compression with high compression ratio
+brew "xz"
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@3"
+# Library for command-line editing
+brew "readline"
+# Command-line interface for SQLite
+brew "sqlite"
+# Download with resuming and segmented downloading
+brew "aria2"
+# Tool for generating GNU Standards-compliant Makefiles
+brew "automake"
+# Bourne-Again SHell, a UNIX command interpreter
+brew "bash"
+# Programmable completion for Bash 3.2
+brew "bash-completion"
+# Clone of cat(1) with syntax highlighting and Git integration
+brew "bat"
+# Parser generator
+brew "bison"
+# Extract files from Microsoft cabinet files
+brew "cabextract"
+# Object-file caching compiler wrapper
+brew "ccache"
+# CD/DVD/Blu-ray premastering and recording software
+brew "cdrtools"
+# Versatile and fast Unicode/ASCII/ANSI graphics renderer
+brew "chafa"
+# Manage your dotfiles across multiple diverse machines, securely
+brew "chezmoi"
+# Ruby environment tool
+brew "chruby"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# Enhanced version of dd for forensics and security
+brew "dcfldd"
+# Diff that understands syntax
+brew "difftastic"
+# Perl lib for reading and writing EXIF metadata
+brew "exiftool"
+# Modern, maintained replacement for ls
+brew "eza"
+# Simple, fast and user-friendly alternative to find
+brew "fd"
+# Command-line fuzzy finder written in Go
+brew "fzf"
+# GNU awk utility
+brew "gawk"
+# GNU database manager
+brew "gdbm"
+# Open-source, cross-platform JavaScript runtime environment
+brew "node"
+# Interact with Google Gemini AI models from the command-line
+brew "gemini-cli"
+# GitHub command-line tool
+brew "gh"
+# Distributed revision control system
+brew "git"
+# GNU Privacy Guard (OpenPGP)
+brew "gnupg"
+# Tools and libraries to manipulate images in select formats
+brew "imagemagick"
+# Lightweight and flexible command-line JSON processor
+brew "jq"
+# Input filter for the pager less
+brew "lesspipe"
+# Portable Foreign Function Interface library
+brew "libffi"
+# YAML Parser
+brew "libyaml"
+# Quickly generate a temporary email address
+brew "mailsy"
+# Mac App Store command-line interface
+brew "mas"
+# Media player based on MPlayer and mplayer2
+brew "mpv"
+# NCurses Disk Usage
+brew "ncdu"
+# Port scanning utility for large networks
+brew "nmap"
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@1.1"
+# Package compiler and linker metadata toolkit
+brew "pkgconf"
+# Python version management
+brew "pyenv"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.11"
+# Generic machine emulator and virtualizer
+brew "qemu"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# Install various Ruby versions and implementations
+brew "ruby-build"
+# Install Ruby, JRuby, Rubinius, TruffleRuby, or mruby
+brew "ruby-install"
+# Safe, concurrent, practical language
+brew "rust"
+# Cross-shell prompt for astronauts
+brew "starship"
+# Tool Command Language
+brew "tcl-tk"
+# Terminal multiplexer
+brew "tmux"
+# Display directories as trees (with optional color/HTML output)
+brew "tree"
+# Internet file retriever
+brew "wget"
+# Library to create, extract, and modify Windows Imaging files
+brew "wimlib"
+# Tracks most-used directories to make cd smarter
+brew "z"
+# General-purpose lossless data-compression library
+brew "zlib"
+# Shell extension to navigate your filesystem faster
+brew "zoxide"
+# Next-generation plugin manager for zsh
+brew "zplug"
+# Fish-like fast/unobtrusive autosuggestions for zsh
+brew "zsh-autosuggestions"
+# The Offline NT Password Editor
+brew "minacle/chntpw/chntpw"
+# Ookla Speedtest
+brew "teamookla/speedtest/speedtest"
+# Command-line interface for 1Password
+cask "1password-cli"
+# Private desktop AI chat application
+cask "anythingllm"
+# Inspect application bundles
+cask "apparency"
+# Automation tool
+cask "bunch"
+# Disk space visualiser
+cask "daisydisk"
+# Automatically switch between light and dark modes based on ambient light sensor
+cask "darkmodebuddy"
+# Desktop automation application
+cask "hammerspoon"
+# Quick Look plug-in that renders source code with syntax highlighting
+cask "jpc-qlcolorcode"
+# Blocks all Keyboard and TouchBar input
+cask "keyboardcleantool"
+# Open-source keystroke visualiser
+cask "keycastr"
+# Find shortcuts for any installed application
+cask "keyclu"
+# GPU-based terminal emulator
+cask "kitty"
+# Utility that shows the latest app updates
+cask "latest"
+# Open-source cross-platform alternative to AirDrop
+cask "localsend"
+# Remote desktop client
+cask "microsoft-remote-desktop"
+# Knowledge base that works on top of a local folder of plain text Markdown files
+cask "obsidian"
+# Quick Look plugin for mobile apps and provisioning profiles
+cask "provisionql"
+# Display image info and preview unsupported formats in QuickLook
+cask "qlimagesize"
+# Quick Look generator for Markdown files
+cask "qlmarkdown"
+# Quick Look plugin for CSV files
+cask "quicklook-csv"
+# Image viewer
+cask "qview"
+# Changes the way the full screen button acts
+cask "rightzoom"
+# Team communication and collaboration software
+cask "slack"
+# Quicklook extension for source files
+cask "syntax-highlight"
+# Tool to invert scroll direction for physical scroll wheels
+cask "unnaturalscrollwheels"
+# Ghostty terminal emulator
+cask "Ghostty"
+# Binary releases of VS Code without MS branding/telemetry/licensing
+cask "vscodium"
+mas "Canary Mail", id: 1236045954
+mas "Drafts", id: 1435957248
+mas "Draw Things", id: 6444050820
+mas "EventScripts", id: 525319418
+mas "HP", id: 1474276998
+mas "oto", id: 6749171372
+mas "Pure Paste", id: 1611378436
+mas "Speediness", id: 1596706466
+vscode "azemoh.one-monokai"
+vscode "charliermarsh.ruff"
+vscode "dbaeumer.vscode-eslint"
+vscode "dnicolson.binary-plist"
+vscode "docker.docker"
+vscode "donjayamanne.python-environment-manager"
+vscode "donjayamanne.python-extension-pack"
+vscode "eamodio.gitlens"
+vscode "emeraldwalk.runonsave"
+vscode "esbenp.prettier-vscode"
+vscode "formulahendry.code-runner"
+vscode "george-alisson.html-preview-vscode"
+vscode "gitpod.gitpod-desktop"
+vscode "ivhernandez.vscode-plist"
+vscode "jakebecker.elixir-ls"
+vscode "kevinrose.vsc-python-indent"
+vscode "koichisasada.vscode-rdbg"
+vscode "mjmcloug.vscode-elixir"
+vscode "monish.regexsnippets"
+vscode "ms-azuretools.vscode-containers"
+vscode "ms-azuretools.vscode-docker"
+vscode "ms-python.autopep8"
+vscode "ms-python.black-formatter"
+vscode "ms-python.debugpy"
+vscode "ms-python.isort"
+vscode "ms-python.python"
+vscode "ms-python.vscode-pylance"
+vscode "ms-python.vscode-python-envs"
+vscode "ms-vscode-remote.remote-containers"
+vscode "ms-vscode-remote.remote-ssh"
+vscode "ms-vscode-remote.remote-ssh-edit"
+vscode "ms-vscode.remote-explorer"
+vscode "njpwerner.autodocstring"
+vscode "oderwat.indent-rainbow"
+vscode "pkief.material-icon-theme"
+vscode "ritwickdey.liveserver"
+vscode "sammkj.vscode-elixir-formatter"
+vscode "shopify.ruby-lsp"
+vscode "solnurkarim.html-to-css-autocompletion"
+vscode "streetsidesoftware.code-spell-checker"
+vscode "sumneko.lua"
+vscode "usernamehw.errorlens"
+vscode "vscode-icons-team.vscode-icons"
+vscode "wholroyd.jinja"
+vscode "zhouronghui.propertylist"

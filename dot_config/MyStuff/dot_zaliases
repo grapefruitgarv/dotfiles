@@ -1,0 +1,133 @@
+# Migrating my aliases from .zshrc to hopefully speed loading time
+
+alias src="source $HOME/.zshrc"
+alias zsconfig="code ~/.zshrc"
+alias home='cd ~'
+alias ls='eza --icons -stype'
+alias lsh='eza --icons --long --header -stype'
+alias lha='eza --icons --long --header -stype -a -a'
+alias la='eza --icons -a -a'
+alias lc='colorls --sd'
+alias lca='colorls --sd -a'
+alias lcl='colorls --sd -la'
+alias lr='\ls -hartl --color'
+alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
+alias lsg='ls --group-directories-first' # group directories first for ls/eza
+alias dl='cd ~/Downloads'
+alias hy='history'
+alias n8n='cd /Volumes/Automation/n8n'
+alias dotgit='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
+# Docker stuff
+# alias dc='docker compose'
+alias dcu='docker compose up -d'
+alias dcd='docker compose down'
+alias dps='docker ps'
+# Quick navigation to external drives
+alias vauto='cd /Volumes/Automation'
+alias vfg='cd /Volumes/Fast\ Guy\ 1'
+alias vphoto='cd /Volumes/PHOTO Plus'
+
+# alias docs='cd ~/Documents'
+# For codium to replace VSCode
+alias code='codium'
+# Avoid accidental deletions
+alias rm='rm -i'
+alias mv='mv -i'
+alias cp='cp -i'
+alias tree='tree -CL 2'
+alias rmt='trash'
+#for Bitbucket git
+alias cfgbit='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+
+#alias cat='bat --paging=never'
+# trying to bring back some old functionality that I lost somehow and some new ones
+
+alias grep='grep -n --color=auto'   # grep color and show line number for each match:
+# alias tree='tree -Ch'   # Colorize tree
+alias path='echo -e ${PATH//:/\\n}'    # Print each PATH entry on a separate line
+
+# Start ConfyUI
+comfy() {
+    cd /Volumes/Automation/ComfyUI
+    source venv/bin/activate
+    export PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0
+    python main.py --force-fp16 --fp32-vae --use-split-cross-attention
+}
+
+# Start n8n
+n8go() {
+    cd /Volumes/Automation/n8n
+    docker compose up -d
+}
+
+# From Oh My Zsh
+# alias ...='../..'
+# alias ....='../../..'
+# alias .....='../../../..'
+# alias ......='../../../../..'
+# alias 1='cd -1'
+# alias 2='cd -2'
+# alias 3='cd -3'
+# alias 4='cd -4'
+# alias 5='cd -5'
+# alias 6='cd -6'
+# alias 7='cd -7'
+# alias 8='cd -8'
+# alias 9='cd -9'
+
+# Docker stuff from ropnop blog: blog.ropnop.com/docker-for-pentesters
+
+alias dockershell="docker run --rm -i -t --entrypoint=/bin/bash"
+alias dockershellsh="docker run --rm -i -t --entrypoint=/bin/sh"
+
+function dockershellhere() {
+  dirname=${PWD##*/}
+  docker run --rm -it --entrypoint=/bin/bash -v `pwd`:/${dirname} -w /${dirname} "$@"
+}
+function dockershellshhere() {
+  dirname=${PWD##*/}
+  docker run --rm -it --entrypoint=/bin/sh -v `pwd`:/${dirname} -w /${dirname} "$@"
+}
+function dockerwindowshellhere() {
+    dirname=${PWD##*/}
+    docker -c 2019-box run --rm -it -v "C:${PWD}:C:/source" -w "C:/source" "$@"
+}
+
+function impacket() {
+    docker run --rm -it rflathers/impacket "$@"
+}
+
+function smbservehere() {
+    local sharename
+    [[ -z $1 ]] && sharename="SHARE" || sharename=$1
+    docker run --rm -it -p 445:445 -v "${PWD}:/tmp/serve" rflathers/impacket smbserver.py -smb2support $sharename /tmp/serve
+}
+
+function nginxhere() {
+    docker run --rm -it -p 80:80 -p 443:443 -v "${PWD}:/srv/data" rflathers/nginxserve
+}
+
+function webdavhere() {
+    docker run --rm -it -p 80:80 -v "${PWD}:/srv/data/share" rflathers/webdav
+}
+
+function metasploit() {
+    docker run --rm -it -v "${HOME}/.msf4:/home/msf/.msf4" metasploitframework/metasploit-framework ./msfconsole "$@"
+}
+
+function metasploitports() {
+    docker run --rm -it -v "${HOME}/.msf4:/home/msf/.msf4" -p 8443-8500:8443-8500 metasploitframework/metasploit-framework ./msfconsole "$@"
+}
+
+function msfvenomhere() {
+    docker run --rm -it -v "${HOME}/.msf4:/home/msf/.msf4" -v "${PWD}:/data" metasploitframework/metasploit-framework ./msfvenom "$@"
+}
+
+function reqdump() {
+    docker run --rm -it -p 80:3000 rflathers/reqdump
+}
+
+function postfiledumphere() {
+    docker run --rm -it -p80:3000 -v "${PWD}:/data" rflathers/postfiledump
+}

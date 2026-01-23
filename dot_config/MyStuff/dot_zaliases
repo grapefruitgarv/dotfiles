@@ -1,7 +1,10 @@
 # Migrating my aliases from .zshrc to hopefully speed loading time
 
+# Allow use of VSCodium with chezmoi
+export EDITOR="codium --wait"
+
 alias src="source $HOME/.zshrc"
-alias zsconfig="code ~/.zshrc"
+alias zsconfig='chezmoi edit --apply ~/.zshrc'
 alias home='cd ~'
 alias ls='eza --icons -stype'
 alias lsh='eza --icons --long --header -stype'
@@ -59,6 +62,11 @@ comfy() {
 n8go() {
     cd /Volumes/Automation/n8n
     docker compose up -d
+}
+
+# Make a change to a chezmoi managed file
+cz() {
+    chezmoi edit --apply "$@"
 }
 
 # From Oh My Zsh

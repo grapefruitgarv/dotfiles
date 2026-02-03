@@ -55,8 +55,9 @@ comfy() {
     cd /Volumes/Automation/ComfyUI
     source venv/bin/activate
     export PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0
-    python main.py --force-fp16 --fp32-vae --use-split-cross-attention
+    python main.py --fp32-vae
 }
+
 
 # Start n8n
 n8go() {

@@ -15,3 +15,4 @@
 # Other stuff I don't want on there
 *mac-askpass.sh
 *pw.sh
+*.zwc

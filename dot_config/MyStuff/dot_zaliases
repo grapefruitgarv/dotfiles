@@ -61,7 +61,7 @@ comfy() {
 # Start Ollama
 stoll () {
     cd /Volumes/Automation/Ollama/Docker_Stuff
-    docker compose up -d
+    docker compose up -d --pull always
 }
 
 # Start n8n

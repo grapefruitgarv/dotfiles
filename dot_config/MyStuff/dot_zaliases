@@ -58,6 +58,11 @@ comfy() {
     python main.py --fp32-vae
 }
 
+# Start Ollama
+stoll () {
+    cd /Volumes/Automation/Ollama/Docker_Stuff
+    docker compose up -d
+}
 
 # Start n8n
 n8go() {

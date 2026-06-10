@@ -61,6 +61,12 @@ comfy() {
 # Start Ollama
 stoll () {
     cd /Volumes/Automation/Ollama/Docker_Stuff
+    docker compose up -d
+}
+
+# Start Ollama with update
+stollup () {
+    cd /Volumes/Automation/Ollama/Docker_Stuff
     docker compose up -d --pull always
 }
 
@@ -89,6 +95,13 @@ cz() {
 # alias 7='cd -7'
 # alias 8='cd -8'
 # alias 9='cd -9'
+
+
+# 5 Minute Timer for AI training project to remind me to save
+aitimer() {
+    while true; do sleep 300; osascript -e 'display notification "5 minutes is up!" with title "Loop Timer"'; say "Time to save"; done
+}
+
 
 # Docker stuff from ropnop blog: blog.ropnop.com/docker-for-pentesters
 

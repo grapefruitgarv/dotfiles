@@ -69,7 +69,13 @@ if type brew &>/dev/null; then
 fi
 
 
-source <(curl -sL init.zshell.dev); zzinit
+# Stop zzinit from loading from the internet 
+# source <(curl -sL init.zshell.dev); zzinit
+
+# Load Zi from local folder
+source ~/.zi/bin/zi.zsh
+autoload -Uz _zi
+(( ${+_comps} )) && _comps[zi]=_zi
 # zi to load plugins
 zi snippet OMZP::git
 zi snippet OMZP::nvm
@@ -189,7 +195,7 @@ zinit light zdharma-continuum/fast-syntax-highlighting
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Set sudo helper.
-export SUDO_ASKPASS=/usr/local/bin/askpass
+# export SUDO_ASKPASS=/usr/local/bin/askpass
 
 source ~/.config/op/plugins.sh
 
@@ -208,6 +214,10 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
+
+# Limit warnings from homebrew
+export HOMEBREW_NO_ENV_HINTS=1
+export HOMEBREW_NO_INSTALL_CLEANUP=1
 
 # Ollama PATH on external
 export OLLAMA_MODELS="/Volumes/Automation/Ollama_Models"
@@ -232,6 +242,9 @@ compinit
 
 # Set huggingface cache to external drive
 export HF_HOME="/Volumes/Automation/HuggingFace/huggingface_cache"
+
+# Allow Jan to use Ollama models
+export OLLAMA_ORIGINS="*"
 
 # Cursor 1 or 2 = Block, 3 or 4 = Underline, 5 or 6 = Beam/Bar. Even for steady, odd for blinking
 # echo -ne '\e[1 q'

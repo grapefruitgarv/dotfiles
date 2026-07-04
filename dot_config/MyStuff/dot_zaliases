@@ -73,7 +73,7 @@ whisperit() {
     ffmpeg -i "$1" -ar 16000 -ac 1 -c:a pcm_s16le "$wav_file"
     
     # Transcribe using your SSD model
-    whisper-cpp -m /Volumes/Automation/Whisper_Models/ggml-large-v3-turbo.bin -f "$wav_file"
+    whisper-cli -m /Volumes/Automation/Whisper_Models/ggml-large-v3-turbo.bin -f "$wav_file"
 }
 
 # Bonus 2: Send to Ollama for cleanup as well
@@ -93,7 +93,7 @@ whisperit2() {
     
     # 2. Transcribe and save to $base.wav.txt
     echo "Transcribing..."
-    whisper-cpp -m /Volumes/Automation/Whisper_Models/ggml-large-v3-turbo.bin -f "$wav_file" -ot
+    whisper-cli -m /Volumes/Automation/Whisper_Models/ggml-large-v3-turbo.bin -f "$wav_file" -ot
     
     # 3. Clean up with Ollama (Llama 3)
     if command -v ollama >/dev/null; then

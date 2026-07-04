@@ -61,6 +61,36 @@ towav() {
     ffmpeg -i "$1" -ar 16000 -ac 1 -c:a pcm_s16le "$output"
 }
 
+# Transcription only (requires a 16kHz mono WAV)
+justtranscribe() {
+    if [ -z "$1" ]; then
+        echo "Usage: justtranscribe <filename.wav>"
+        return 1
+    fi
+    
+    local input_file="$1"
+    local base="${input_file%.*}"
+    local raw_txt="${base}.txt"
+    local clean_txt="${base}_clean.txt"
+    
+    # 1. Transcribe using the SSD model
+    echo "Transcribing..."
+    whisper-cli -m "/Volumes/Automation/Whisper_Models/ggml-large-v3-turbo.bin" -f "$input_file" --output-txt --output-file "$base"
+    
+    # 2. Clean up with Ollama (Llama 3)
+    if command -v ollama >/dev/null; then
+        if [ -f "$raw_txt" ]; then
+            echo "Cleaning up transcript with Llama 3..."
+            cat "$raw_txt" | ollama run llama3 "Clean up this transcript. Remove filler words like 'um' and 'uh', fix punctuation, and format it into clear paragraphs. Do not add any intro text, just give me the cleaned transcript." > "$clean_txt"
+            echo "Done! Clean transcript saved to: $clean_txt"
+        else
+            echo "Error: Could not find the raw transcript file at $raw_txt"
+        fi
+    else
+        echo "Transcription finished, but Ollama is not installed for cleanup."
+    fi
+}
+
 # Bonus: Combined command to convert AND transcribe in one go
 whisperit() {
     if [ -z "$1" ]; then

@@ -67,39 +67,30 @@ whisperit() {
         echo "Usage: whisperit <filename>"
         return 1
     fi
-    local wav_file="${1%.*}.wav"
     
-    # Convert
-    ffmpeg -i "$1" -ar 16000 -ac 1 -c:a pcm_s16le "$wav_file"
-    
-    # Transcribe using your SSD model
-    whisper-cli -m /Volumes/Automation/Whisper_Models/ggml-large-v3-turbo.bin -f "$wav_file"
-}
-
-# Bonus 2: Send to Ollama for cleanup as well
-whisperit2() {
-    if [ -z "$1" ]; then
-        echo "Usage: whisperit2 <filename>"
-        return 1
-    fi
-    
-    local base="${1%.*}"
-    local wav_file="$base.wav"
-    local raw_txt="$base.wav.txt"
-    local clean_txt="$base_clean.txt"
+    # Use quotes to handle spaces in file paths
+    local input_file="$1"
+    local base="${input_file%.*}"
+    local wav_file="${base}.wav"
+    local raw_txt="${base}.txt"
+    local clean_txt="${base}_clean.txt"
     
     # 1. Convert to Whisper-ready WAV
-    ffmpeg -i "$1" -ar 16000 -ac 1 -c:a pcm_s16le "$wav_file" -y
+    ffmpeg -i "$input_file" -ar 16000 -ac 1 -c:a pcm_s16le "$wav_file" -y
     
-    # 2. Transcribe and save to $base.wav.txt
+    # 2. Transcribe and force the output filename
     echo "Transcribing..."
-    whisper-cli -m /Volumes/Automation/Whisper_Models/ggml-large-v3-turbo.bin -f "$wav_file" -ot
+    whisper-cli -m "/Volumes/Automation/Whisper_Models/ggml-large-v3-turbo.bin" -f "$wav_file" --output-txt --output-file "$base"
     
     # 3. Clean up with Ollama (Llama 3)
     if command -v ollama >/dev/null; then
-        echo "Cleaning up transcript with Llama 3..."
-        cat "$raw_txt" | ollama run llama3 "Clean up this transcript. Remove filler words like 'um' and 'uh', fix punctuation, and format it into clear paragraphs. Do not add any intro text, just give me the cleaned transcript." > "$clean_txt"
-        echo "Done! Clean transcript saved to: $clean_txt"
+        if [ -f "$raw_txt" ]; then
+            echo "Cleaning up transcript with Llama 3..."
+            cat "$raw_txt" | ollama run llama3 "Clean up this transcript. Remove filler words like 'um' and 'uh', fix punctuation, and format it into clear paragraphs. Do not add any intro text, just give me the cleaned transcript." > "$clean_txt"
+            echo "Done! Clean transcript saved to: $clean_txt"
+        else
+            echo "Error: Could not find the raw transcript file at $raw_txt"
+        fi
     else
         echo "Transcription finished, but Ollama is not installed for cleanup."
     fi

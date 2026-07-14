@@ -220,7 +220,7 @@ export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_NO_INSTALL_CLEANUP=1
 
 # Ollama PATH on external
-export OLLAMA_MODELS="/Volumes/Automation/Ollama_Models"
+export OLLAMA_MODELS="/Volumes/Automation/Ollama/Docker_Stuff/models/models"
 
 # Directories to exclude from z's search
 export ZSH_Z_EXCLUDE_DIRS=('Users/archie/Documents/Coding/My stuff/Docker MCPs/docker-mcp-tutorial/examples/mydice')

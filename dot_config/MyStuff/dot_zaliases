@@ -26,6 +26,7 @@ alias dotgit='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias dcu='docker compose up -d'
 alias dcd='docker compose down'
 alias dps='docker ps'
+
 # Quick navigation to external drives
 alias vauto='cd /Volumes/Automation'
 alias vfg='cd /Volumes/Fast\ Guy\ 1'
@@ -152,6 +153,12 @@ stollup () {
 # Start n8n
 n8go() {
     cd /Volumes/Automation/n8n
+    docker compose up -d
+}
+
+# For OpenClaw
+oclaw() {
+    cd ~/.openclaw-docker
     docker compose up -d
 }
 

@@ -246,5 +246,8 @@ export HF_HOME="/Volumes/Automation/HuggingFace/huggingface_cache"
 # Allow Jan to use Ollama models
 export OLLAMA_ORIGINS="*"
 
+# Keeps Ollama models loded in RAM
+export OLLAMA_KEEP_ALIVE="-1"
+
 # Cursor 1 or 2 = Block, 3 or 4 = Underline, 5 or 6 = Beam/Bar. Even for steady, odd for blinking
 # echo -ne '\e[1 q'

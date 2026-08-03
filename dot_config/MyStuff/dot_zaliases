@@ -25,6 +25,7 @@ alias dotgit='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 # alias dc='docker compose'
 alias dcu='docker compose up -d'
 alias dcd='docker compose down'
+alias dcdoh='docker compose down && docker rm -f $(docker ps -a -q --filter "ancestor=ghcr.io/all-hands-ai/runtime:0.14-nikolaik")'
 alias dps='docker ps'
 
 # Quick navigation to external drives

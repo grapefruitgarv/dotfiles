@@ -163,6 +163,12 @@ oclaw() {
     docker compose up -d
 }
 
+# For OpenHands
+ohand() {
+    cd ~/Documents/Coding/OpenHands
+    docker compose up -d
+}
+
 # Make a change to a chezmoi managed file
 cz() {
     chezmoi edit --apply "$@"

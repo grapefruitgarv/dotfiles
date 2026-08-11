@@ -256,5 +256,9 @@ export OLLAMA_NUM_PARALLEL=1
 
 export OLLAMA_FLASH_ATTENTION=1
 
+# Allows proper rendering of the prompt for git and such in Canario
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
 # Cursor 1 or 2 = Block, 3 or 4 = Underline, 5 or 6 = Beam/Bar. Even for steady, odd for blinking
 # echo -ne '\e[1 q'

@@ -157,21 +157,44 @@ n8go() {
     docker compose up -d
 }
 
+# Make a change to a chezmoi managed file
+cz() {
+    chezmoi edit --apply "$@"
+}
+
 # For OpenClaw
 oclaw() {
     cd ~/.openclaw-docker
     docker compose up -d
 }
 
+# When running OpenClaw and wanting to check stats from Headroom
+hroom() {
+    docker exec openclaw_gateway curl -s http://headroom_google_proxy:8787/stats | jq '{
+  requests_processed: .display_session.requests,
+  tokens_saved_direct: .tokens.saved,
+  cache_read_tokens: .display_session.cache_read_tokens,
+  compression_savings_usd: .display_session.compression_savings_usd,
+  cache_savings_usd: .display_session.cache_savings_usd,
+  total_saved_usd: ((.display_session.compression_savings_usd // 0) + (.display_session.cache_savings_usd // 0)),
+  total_input_tokens: .display_session.total_input_tokens
+}'
+}
+
+# And to get a text output, not json
+hroom1() {
+    docker exec openclaw_gateway curl -s http://headroom_google_proxy:8787/stats | jq -r '
+  "[" + (.display_session.requests | tostring) + " reqs] " +
+  "Direct Saved: " + (.tokens.saved | tostring) + " tokens | " +
+  "Cache Reads: " + (.display_session.cache_read_tokens | tostring) + " tokens | " +
+  "Total Saved: $" + (((.display_session.compression_savings_usd // 0) + (.display_session.cache_savings_usd // 0)) | tostring)
+'
+}
+
 # For OpenHands
 ohand() {
     cd ~/Documents/Coding/OpenHands
     docker compose up -d
-}
-
-# Make a change to a chezmoi managed file
-cz() {
-    chezmoi edit --apply "$@"
 }
 
 # From Oh My Zsh

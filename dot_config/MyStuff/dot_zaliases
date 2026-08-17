@@ -191,6 +191,26 @@ hroom1() {
 '
 }
 
+# Stats for Ollama on OpenClaw
+hroomo() {
+    docker exec openclaw_gateway curl -s http://headroom_ollama_proxy:8788/stats | jq '{
+  requests_processed: .display_session.requests,
+  tokens_saved_direct: .tokens.saved,
+  cache_read_tokens: .display_session.cache_read_tokens,
+  total_input_tokens: .display_session.total_input_tokens,
+  savings_percent: .display_session.savings_percent
+}'
+}
+
+hroomo1 () {
+    docker exec openclaw_gateway curl -s http://headroom_ollama_proxy:8788/stats | jq -r '
+  "[" + (.display_session.requests | tostring) + " reqs] " +
+  "Input Tokens: " + (.display_session.total_input_tokens | tostring) + " | " +
+  "Direct Saved: " + ((.tokens.saved // 0) | tostring) + " tokens | " +
+  "Savings: " + ((.display_session.savings_percent // 0) | tostring) + "%"
+'
+}
+
 # For OpenHands
 ohand() {
     cd ~/Documents/Coding/OpenHands

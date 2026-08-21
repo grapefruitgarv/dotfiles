@@ -174,6 +174,7 @@ hroom() {
   requests_processed: .display_session.requests,
   tokens_saved_direct: .tokens.saved,
   cache_read_tokens: .display_session.cache_read_tokens,
+  cost_incurred_usd: .display_session.total_input_cost_usd,
   compression_savings_usd: .display_session.compression_savings_usd,
   cache_savings_usd: .display_session.cache_savings_usd,
   total_saved_usd: ((.display_session.compression_savings_usd // 0) + (.display_session.cache_savings_usd // 0)),
@@ -185,9 +186,9 @@ hroom() {
 hroom1() {
     docker exec openclaw_gateway curl -s http://headroom_google_proxy:8787/stats | jq -r '
   "[" + (.display_session.requests | tostring) + " reqs] " +
-  "Direct Saved: " + (.tokens.saved | tostring) + " tokens | " +
-  "Cache Reads: " + (.display_session.cache_read_tokens | tostring) + " tokens | " +
-  "Total Saved: $" + (((.display_session.compression_savings_usd // 0) + (.display_session.cache_savings_usd // 0)) | tostring)
+  "Cost Incurred: $" + ((.display_session.total_input_cost_usd // 0) | tostring) + " | " +
+  "Total Saved: $" + (((.display_session.compression_savings_usd // 0) + (.display_session.cache_savings_usd // 0)) | tostring) + " " +
+  "(Direct: " + (.tokens.saved | tostring) + " toks, Cache Reads: " + (.display_session.cache_read_tokens | tostring) + " toks)"
 '
 }
 

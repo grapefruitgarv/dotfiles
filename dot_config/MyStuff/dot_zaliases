@@ -172,13 +172,13 @@ oclaw() {
 hroom() {
     docker exec openclaw_gateway curl -s http://headroom_google_proxy:8787/stats | jq '{
   requests_processed: .display_session.requests,
-  tokens_saved_direct: .tokens.saved,
+  total_input_tokens: .display_session.total_input_tokens,
   cache_read_tokens: .display_session.cache_read_tokens,
-  cost_incurred_usd: .display_session.total_input_cost_usd,
+  tokens_saved_direct: .tokens.saved,
   compression_savings_usd: .display_session.compression_savings_usd,
   cache_savings_usd: .display_session.cache_savings_usd,
   total_saved_usd: ((.display_session.compression_savings_usd // 0) + (.display_session.cache_savings_usd // 0)),
-  total_input_tokens: .display_session.total_input_tokens
+  cost_incurred_usd: .display_session.total_input_cost_usd
 }'
 }
 

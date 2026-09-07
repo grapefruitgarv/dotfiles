@@ -94,31 +94,82 @@ justtranscribe() {
 }
 
 # Bonus: Combined command to convert AND transcribe in one go
+# whisperit() {
+#     if [ -z "$1" ]; then
+#         echo "Usage: whisperit <filename>"
+#         return 1
+#     fi
+    
+#     # Use quotes to handle spaces in file paths
+#     local input_file="$1"
+#     local base="${input_file%.*}"
+#     local wav_file="${base}.wav"
+#     local raw_txt="${base}.txt"
+#     local clean_txt="${base}_clean.txt"
+    
+#     # 1. Convert to Whisper-ready WAV
+#     ffmpeg -i "$input_file" -ar 16000 -ac 1 -c:a pcm_s16le "$wav_file" -y
+    
+#     # 2. Transcribe and force the output filename
+#     echo "Transcribing..."
+#     whisper-cli -m "/Volumes/Automation/Whisper_Models/ggml-large-v3-turbo.bin" -f "$wav_file" --output-txt --output-file "$base"
+    
+#     # 3. Clean up with Ollama (Llama 3)
+#     if command -v ollama >/dev/null; then
+#         if [ -f "$raw_txt" ]; then
+#             echo "Cleaning up transcript with Llama 3..."
+#             cat "$raw_txt" | ollama run llama3 "Clean up this transcript. Remove filler words like 'um' and 'uh', fix punctuation, and format it into clear paragraphs. Do not add any intro text, just give me the cleaned transcript." > "$clean_txt"
+#             echo "Done! Clean transcript saved to: $clean_txt"
+#         else
+#             echo "Error: Could not find the raw transcript file at $raw_txt"
+#         fi
+#     else
+#         echo "Transcription finished, but Ollama is not installed for cleanup."
+#     fi
+# }
+
+# New whisperit 9-6-26
 whisperit() {
     if [ -z "$1" ]; then
         echo "Usage: whisperit <filename>"
         return 1
     fi
-    
-    # Use quotes to handle spaces in file paths
+
     local input_file="$1"
     local base="${input_file%.*}"
     local wav_file="${base}.wav"
     local raw_txt="${base}.txt"
     local clean_txt="${base}_clean.txt"
-    
-    # 1. Convert to Whisper-ready WAV
-    ffmpeg -i "$input_file" -ar 16000 -ac 1 -c:a pcm_s16le "$wav_file" -y
-    
+
+    # 1. Convert to Whisper-ready WAV (skip if already exists)
+    if [ -f "$wav_file" ]; then
+        echo "WAV file already exists, skipping conversion."
+    else
+        ffmpeg -i "$input_file" -ar 16000 -ac 1 -c:a pcm_s16le "$wav_file" -y
+    fi
+
     # 2. Transcribe and force the output filename
     echo "Transcribing..."
-    whisper-cli -m "/Volumes/Automation/Whisper_Models/ggml-large-v3-turbo.bin" -f "$wav_file" --output-txt --output-file "$base"
-    
-    # 3. Clean up with Ollama (Llama 3)
+    whisper-cli -m "/Volumes/Automation/Whisper_Models/ggml-large-v3-turbo.bin" \
+        -f "$wav_file" --output-txt --output-file "$base"
+
+    # 3. Clean up with Ollama API (avoids terminal escape sequences)
     if command -v ollama >/dev/null; then
         if [ -f "$raw_txt" ]; then
             echo "Cleaning up transcript with Llama 3..."
-            cat "$raw_txt" | ollama run llama3 "Clean up this transcript. Remove filler words like 'um' and 'uh', fix punctuation, and format it into clear paragraphs. Do not add any intro text, just give me the cleaned transcript." > "$clean_txt"
+
+            local prompt="Clean up this transcript. Remove filler words like 'um' and 'uh', fix punctuation, and format it into clear paragraphs. Do not add any intro text, just give me the cleaned transcript."
+
+            # Use jq to safely build JSON (handles quotes/newlines in transcript)
+            jq -n \
+                --arg prompt "$prompt" \
+                --arg content "$(cat "$raw_txt")" \
+                '{model: "llama3", prompt: ($prompt + "\n\n" + $content), stream: false}' | \
+                curl -s http://localhost:11434/api/generate \
+                    -H "Content-Type: application/json" \
+                    -d @- | \
+                jq -r '.response' > "$clean_txt"
+
             echo "Done! Clean transcript saved to: $clean_txt"
         else
             echo "Error: Could not find the raw transcript file at $raw_txt"

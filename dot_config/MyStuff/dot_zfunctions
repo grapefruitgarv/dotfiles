@@ -1,40 +1,249 @@
 # Functions from Oh My Zsh that I use, specifically "take" that's all for now
-take () {
-	if [[ $1 =~ ^(https?|ftp).*\.(tar\.(gz|bz2|xz)|tgz)$ ]]
-	then
-		takeurl "$1"
-	elif [[ $1 =~ ^(https?|ftp).*\.(zip)$ ]]
-	then
-		takezip "$1"
-	elif [[ $1 =~ ^([A-Za-z0-9]\+@|https?|git|ssh|ftps?|rsync).*\.git/?$ ]]
-	then
-		takegit "$1"
-	else
-		takedir "$@"
-	fi
+# take () {
+# 	if [[ $1 =~ ^(https?|ftp).*\.(tar\.(gz|bz2|xz)|tgz)$ ]]
+# 	then
+# 		takeurl "$1"
+# 	elif [[ $1 =~ ^(https?|ftp).*\.(zip)$ ]]
+# 	then
+# 		takezip "$1"
+# 	elif [[ $1 =~ ^([A-Za-z0-9]\+@|https?|git|ssh|ftps?|rsync).*\.git/?$ ]]
+# 	then
+# 		takegit "$1"
+# 	else
+# 		takedir "$@"
+# 	fi
+# }
+# takedir () {
+# 	mkdir -p $@ && cd ${@:$#}
+# }
+# takegit () {
+# 	git clone "$1"
+# 	cd "$(basename ${1%%.git})"
+# }
+# takeurl () {
+# 	local data thedir
+# 	data="$(mktemp)" 
+# 	curl -L "$1" > "$data"
+# 	tar xf "$data"
+# 	thedir="$(tar tf "$data" | head -n 1)" 
+# 	rm "$data"
+# 	cd "$thedir"
+# }
+# takezip () {
+# 	local data thedir
+# 	data="$(mktemp)" 
+# 	curl -L "$1" > "$data"
+# 	unzip "$data" -d "./"
+# 	thedir="$(unzip -l "$data" | awk 'NR==4 {print $4}' | sed 's/\/.*//')" 
+# 	rm "$data"
+# 	cd "$thedir"
+# }
+
+# The wtf function
+wtf() {
+
+  local exit_code=$?
+
+  local last_cmd
+
+  last_cmd=$(fc -ln -1 | sed 's/^ *//')
+
+  local last_err
+
+  last_err=$(cat /tmp/.last_stderr 2>/dev/null | tail -20)
+
+  local os_info
+
+  os_info=$(uname -srm)
+
+  if [[ -z "$last_err" && $exit_code -eq 0 ]]; then
+
+    echo "Last command succeeded (exit code 0). Nothing to explain."
+
+    return
+
+  fi
+
+  local prompt="Command: $last_cmd
+
+Exit code: $exit_code
+
+Error output: $(sanitize_prompt "$last_err")
+
+OS: $os_info
+
+Explain what went wrong and suggest the most likely fix. Two to three sentences unless the fix genuinely requires more detail."
+
+  curl -s "${AI_HOST:-http://localhost:11434}/api/generate" \
+
+    -d "$(jq -n \
+
+         --arg model "${AI_MODEL:-phi4-mini}" \
+
+         --arg prompt "$prompt" \
+
+         '{model: $model, prompt: $prompt, stream: false}')" \
+
+  | jq -r '.response'
+
+  > /tmp/.last_stderr
+
 }
-takedir () {
-	mkdir -p $@ && cd ${@:$#}
+
+# ai function
+ai() {
+
+  local description="$*"
+
+  if [[ -z "$description" ]]; then
+
+    echo "Usage: ai <description of what you want to do>"
+
+    return 1
+
+  fi
+
+  # Include piped context if present
+
+  local pipe_context=""
+
+  if [[ ! -t 0 ]]; then
+
+    pipe_context="
+
+Context from stdin:
+
+$(cat | head -50)"
+
+  fi
+
+  local suggested_cmd
+
+  suggested_cmd=$(curl -s "${AI_HOST:-http://localhost:11434}/api/generate" \
+
+    -d "$(jq -n \
+
+         --arg model "${AI_MODEL:-phi4-mini}" \
+
+         --arg sys "You are a Linux shell command generator. Output only the raw shell command with no explanation, no markdown, no backticks. Target bash on Linux with GNU coreutils." \
+
+         --arg prompt "Task: $description$pipe_context" \
+
+         '{model: $model, system: $sys, prompt: $prompt, stream: false}')" \
+
+    | jq -r '.response' | tr -d '`' | sed '/^bash$/d')
+
+  echo "Command: $suggested_cmd"
+
+  echo -n "Execute? [y/N] "
+
+  read -r confirm
+
+  if [[ "$confirm" =~ ^[Yy]$ ]]; then
+
+    eval "$suggested_cmd"
+
+  fi
+
 }
-takegit () {
-	git clone "$1"
-	cd "$(basename ${1%%.git})"
+
+# How command to have it explain
+how() {
+
+  curl -s "${AI_HOST:-http://localhost:11434}/api/generate" \
+
+    -d "$(jq -n \
+
+         --arg model "${AI_MODEL:-phi4-mini}" \
+
+         --arg sys "You are a Linux shell expert. Given a task description, provide the command and a concise explanation of each significant flag." \
+
+         --arg prompt "Task: $*" \
+
+         '{model: $model, system: $sys, prompt: $prompt, stream: false}')" \
+
+  | jq -r '.response'
+
 }
-takeurl () {
-	local data thedir
-	data="$(mktemp)" 
-	curl -L "$1" > "$data"
-	tar xf "$data"
-	thedir="$(tar tf "$data" | head -n 1)" 
-	rm "$data"
-	cd "$thedir"
+
+# Explain command to help with man page explanations
+explain() {
+
+  local cmd="$1"
+
+  [[ -z "$cmd" ]] && { echo "Usage: explain <command>"; return 1; }
+
+  local cache_dir="$HOME/.cache/ai-assistant"
+
+  local cache_file="$cache_dir/$cmd.txt"
+
+  mkdir -p "$cache_dir"
+
+  # Return cached result if available
+
+  if [[ -f "$cache_file" ]]; then
+
+    cat "$cache_file"
+
+    return
+
+  fi
+
+  # Get documentation source
+
+  local doc_text=""
+
+  if man "$cmd" &>/dev/null; then
+
+    doc_text=$(man "$cmd" | col -b | head -200)
+
+  elif "$cmd" --help &>/dev/null; then
+
+    doc_text=$("$cmd" --help 2>&1 | head -100)
+
+  else
+
+    doc_text="No man page or --help output available for '$cmd'."
+
+  fi
+
+  local result
+
+  result=$(curl -s "${AI_HOST:-http://localhost:11434}/api/generate" \
+
+    -d "$(jq -n \
+
+         --arg model "${AI_MODEL:-phi4-mini}" \
+
+         --arg sys "You are a technical documentation expert. Summarize man pages into practical bullet points a working developer can act on immediately." \
+
+         --arg prompt "Summarize this documentation in 6-8 bullet points. Focus on common use cases and frequently used flags. Skip history, bugs sections, and obscure edge cases.
+
+$doc_text" \
+
+         '{model: $model, system: $sys, prompt: $prompt, stream: false}')" \
+
+  | jq -r '.response')
+
+  echo "$result" | tee "$cache_file"
+
 }
-takezip () {
-	local data thedir
-	data="$(mktemp)" 
-	curl -L "$1" > "$data"
-	unzip "$data" -d "./"
-	thedir="$(unzip -l "$data" | awk 'NR==4 {print $4}' | sed 's/\/.*//')" 
-	rm "$data"
-	cd "$thedir"
+
+# Explain flag
+explain-flag() {
+
+  curl -s "${AI_HOST:-http://localhost:11434}/api/generate" \
+
+    -d "$(jq -n \
+
+         --arg model "${AI_MODEL:-phi4-mini}" \
+
+         --arg sys "Explain what each flag in a shell command does. One line per flag, no preamble." \
+
+         --arg prompt "Explain each flag: $*" \
+
+         '{model: $model, system: $sys, prompt: $prompt, stream: false}')" \
+
+  | jq -r '.response'
+
 }

@@ -248,15 +248,19 @@ export OLLAMA_ORIGINS="*"
 
 # Keeps Ollama models loded in RAM
 export OLLAMA_KEEP_ALIVE="-1"
+export OLLAMA_MAX_LOADED_MODELS="3"
+
+# Re-inject into macOS launchd across terminal sessions
+launchctl setenv OLLAMA_KEEP_ALIVE "-1"
+launchctl setenv OLLAMA_MAX_LOADED_MODELS "3"
 
 # Increase default context length
 export OLLAMA_CONTEXT_LENGTH="32768"
 
-export OLLAMA_NUM_PARALLEL=2
+export OLLAMA_NUM_PARALLEL="2"
 
-export OLLAMA_MAX_LOADED_MODELS=3
-
-export OLLAMA_FLASH_ATTENTION=1
+export OLLAMA_FLASH_ATTENTION="1"
+launchctl setenv OLLAMA_FLASH_ATTENTION "1"
 
 # Allows proper rendering of the prompt for git and such in Canario
 export LANG=en_US.UTF-8

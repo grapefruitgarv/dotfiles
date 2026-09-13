@@ -262,6 +262,10 @@ export OLLAMA_NUM_PARALLEL="2"
 export OLLAMA_FLASH_ATTENTION="1"
 launchctl setenv OLLAMA_FLASH_ATTENTION "1"
 
+# Quantizing the KV cache to 8-bit
+export OLLAMA_KV_CACHE_TYPE="q8_0"
+launchctl setenv OLLAMA_KV_CACHE_TYPE "q8_0"
+
 # Allows proper rendering of the prompt for git and such in Canario
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8

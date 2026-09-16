@@ -21,6 +21,8 @@ alias hy='history'
 alias n8n='cd /Volumes/Automation/n8n'
 alias dotgit='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
+alias ops='ollama ps'
+
 # Docker stuff
 # alias dc='docker compose'
 alias dcu='docker compose up -d'

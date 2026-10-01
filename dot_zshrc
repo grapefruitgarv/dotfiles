@@ -266,6 +266,9 @@ launchctl setenv OLLAMA_FLASH_ATTENTION "1"
 export OLLAMA_KV_CACHE_TYPE="q8_0"
 launchctl setenv OLLAMA_KV_CACHE_TYPE "q8_0"
 
+# Stuff for Tart
+export TART_HOME="/Volumes/Automation/tart"
+
 # Allows proper rendering of the prompt for git and such in Canario
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8

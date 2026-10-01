@@ -30,6 +30,7 @@ alias dcu='docker compose up -d'
 alias dcd='docker compose down'
 alias dcdoh='docker compose down && docker rm -f $(docker ps -a -q --filter "ancestor=ghcr.io/all-hands-ai/runtime:0.14-nikolaik")'
 alias dps='docker ps'
+alias kld='killall "Docker" 2>/dev/null; killall "com.docker.backend" 2>/dev/null'
 
 # Quick navigation to external drives
 alias vauto='cd /Volumes/Automation'

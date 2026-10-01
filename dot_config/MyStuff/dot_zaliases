@@ -22,6 +22,7 @@ alias n8n='cd /Volumes/Automation/n8n'
 alias dotgit='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 alias ops='ollama ps'
+alias klo='killall Ollama 2>/dev/null || true'
 
 # Docker stuff
 # alias dc='docker compose'
